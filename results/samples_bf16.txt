@@ -1,0 +1,45 @@
+Overriding: out_dir = out/task0-bf16
+Overriding: ckpt_name = best_ckpt.pt
+Overriding: device = cuda
+Overriding: dtype = bfloat16
+Overriding: num_samples = 3
+Overriding: max_new_tokens = 200
+Overriding: start = ROMEO:
+Overriding: temperature = 0.8
+Overriding: top_k = 200
+Overriding: seed = 1337
+number of parameters: 0.80M
+Loading meta from data\shakespeare_char\meta.pkl...
+ROMEO:
+All before will and is so be maders, but but take
+Our some gaters bard that us he had by to lady,
+But conden than the much make which of it.
+
+ESCALUS:
+I long ever well.
+
+ANGELO:
+Here it by the devil 
+---------------
+ROMEO:
+Why, sir, sir.
+
+KING RICHARD II:
+No here stand and the tyrant make nor of this death:
+I should that more not what evices to them,
+Will we have he poor of his but than none farful
+Are my some montey a
+---------------
+ROMEO:
+More, for dear?
+
+KING EDWARD IV:
+Brother and advance.
+
+ESCALUS:
+Go cousin, and your banchand for his need.
+
+QUEEN ELIZABETH:
+My lord! I have see--poor between through the
+could see a liege of the muc
+---------------

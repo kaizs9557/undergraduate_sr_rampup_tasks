@@ -1,0 +1,42 @@
+Overriding: out_dir = out/task0-fp32
+Overriding: ckpt_name = best_ckpt.pt
+Overriding: device = cuda
+Overriding: dtype = float32
+Overriding: num_samples = 3
+Overriding: max_new_tokens = 200
+Overriding: start = ROMEO:
+Overriding: temperature = 0.8
+Overriding: top_k = 200
+Overriding: seed = 1337
+number of parameters: 0.80M
+Loading meta from data\shakespeare_char\meta.pkl...
+ROMEO:
+Now thy bridle.
+
+STANLEY:
+He made the way to take rudge the change:
+Whith is well, therefore thou endrece my faces
+Of my to heavens, to that I confit think, and if
+endeneming at Hereford the do be lo
+---------------
+ROMEO:
+Why, and be self in you here?
+
+CORIOLANUS:
+But news him you love.
+I can pater to should should that more not what evilasted
+And our false his eart so more for unto and thrust,
+I'll some to shall did 
+---------------
+ROMEO:
+More, that Prince, Some, and so hast you say adval the Edward?
+
+GREMIO:
+Nay, no I will I come care, the son, being.
+
+CLARENCE:
+That so a changed-son; and we me madam?
+
+BUCKINGHAM:
+You welcome, whom c
+---------------
