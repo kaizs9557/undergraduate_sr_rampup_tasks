@@ -1,0 +1,51 @@
+tokens per iteration will be: 4,096
+found vocab_size = 65 (inside data\shakespeare_char\meta.pkl)
+Initializing a new model from scratch
+number of parameters: 0.80M
+total params (incl. position emb): 812,288 (0.812M)
+num decayed parameter tensors: 18, with 811,136 parameters
+num non-decayed parameter tensors: 9, with 1,152 parameters
+using fused AdamW: True
+step 0: train loss 4.1818, val loss 4.1815, val ppl 65.47
+iter 0: loss 4.1843, time 871.60ms, tok/s 4,699, peak 190MB, mfu 0.00%
+step 5: train loss 3.9590, val loss 3.9663, val ppl 52.79
+  new best val loss 3.9663 -> best_ckpt.pt
+step 10: train loss 3.7216, val loss 3.7414, val ppl 42.16
+  new best val loss 3.7414 -> best_ckpt.pt
+iter 10: loss 3.7464, time 105.73ms, tok/s 38,741, peak 197MB, mfu 0.07%
+
+run summary written to ../results\T0-DEBUG-001.json
+{
+  "run_tag": "T0-DEBUG-001",
+  "git_sha": "b44f4b81452f5e484a84952764effed7939a928a",
+  "dtype": "float32",
+  "tf32": false,
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "dataset": "shakespeare_char",
+  "model_args": {
+    "n_layer": 4,
+    "n_head": 4,
+    "n_embd": 128,
+    "block_size": 128,
+    "bias": false,
+    "vocab_size": 65,
+    "dropout": 0.1
+  },
+  "batch_size": 32,
+  "gradient_accumulation_steps": 1,
+  "tokens_per_iter": 4096,
+  "max_iters": 10,
+  "n_params": 812288,
+  "best_val_loss": 3.7414,
+  "best_val_ppl": 42.16,
+  "wall_time_s": 1.2,
+  "train_time_s": 1.2,
+  "median_tokens_per_sec": 38741.0,
+  "avg_tokens_per_sec": 33494.0,
+  "peak_mem_MB": 197.3,
+  "ckpt_MB": 9.33,
+  "best_ckpt_MB": 9.33,
+  "wandb_run_id": "",
+  "wandb_run_url": ""
+}

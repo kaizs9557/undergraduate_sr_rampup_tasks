@@ -17,6 +17,8 @@ $ torchrun --nproc_per_node=8 --nnodes=2 --node_rank=1 --master_addr=123.456.123
 """
 
 import os
+import sys
+import json
 import time
 import math
 import pickle
@@ -72,6 +74,15 @@ backend = 'nccl' # 'nccl', 'gloo', etc.
 device = 'cuda' # examples: 'cpu', 'cuda', 'cuda:0', 'cuda:1' etc., or try 'mps' on macbooks
 dtype = 'bfloat16' if torch.cuda.is_available() and torch.cuda.is_bf16_supported() else 'float16' # 'float32', 'bfloat16', or 'float16', the latter will auto implement a GradScaler
 compile = True # use PyTorch 2.0 to compile the model to be faster
+# ---- 本项目新增：Task 0 需要的可观测性开关 ----
+tf32 = True            # FP32 的矩阵乘是否允许降级成 TF32；做严格 FP32 基线时设 False
+run_tag = ''           # 实验编号，如 T0-FP32-001；为空表示"临时跑，不记日志、不写 summary"
+results_dir = 'results'  # 日志和 run_summary.json 放到哪个目录
+profile = False        # 是否采集 torch.profiler 的 trace
+profile_wait = 10      # 前 10 步完全不采样（让 CUDA 预热）
+profile_warmup = 5     # 再 5 步只热身，不记入 trace
+profile_steps = 30     # 正式记录的步数（PDF 要求连续 20–50 个稳定 step）
+profile_out_dir = 'results/profiler'
 # -----------------------------------------------------------------------------
 config_keys = [k for k,v in globals().items() if not k.startswith('_') and isinstance(v, (int, float, bool, str))]
 exec(open('configurator.py').read()) # overrides from command line or config file
@@ -98,14 +109,39 @@ else:
     master_process = True
     seed_offset = 0
     ddp_world_size = 1
+
+# ---- 日志双写：终端 + results/logs/<run_tag>.log ----
+class _Tee:
+    """把 print 的内容同时写到终端和文件。"""
+    def __init__(self, terminal, logfile):
+        self.terminal = terminal
+        self.log = logfile
+    def write(self, msg):
+        self.terminal.write(msg)
+        self.log.write(msg)
+    def flush(self):
+        self.terminal.flush()
+        self.log.flush()
+
+if master_process and run_tag:
+    os.makedirs(os.path.join(results_dir, 'logs'), exist_ok=True)
+    _logfile = open(os.path.join(results_dir, 'logs', run_tag + '.log'),
+                    'w', encoding='utf-8', buffering=1)
+    sys.stdout = _Tee(sys.stdout, _logfile)
+    sys.stderr = _Tee(sys.stderr, _logfile)
+
 tokens_per_iter = gradient_accumulation_steps * ddp_world_size * batch_size * block_size
 print(f"tokens per iteration will be: {tokens_per_iter:,}")
 
 if master_process:
     os.makedirs(out_dir, exist_ok=True)
 torch.manual_seed(1337 + seed_offset)
-torch.backends.cuda.matmul.allow_tf32 = True # allow tf32 on matmul
-torch.backends.cudnn.allow_tf32 = True # allow tf32 on cudnn
+if tf32:                                           #修改
+    torch.backends.cuda.matmul.allow_tf32 = True
+    torch.backends.cudnn.allow_tf32 = True
+else:
+    torch.backends.cuda.matmul.allow_tf32 = False
+    torch.backends.cudnn.allow_tf32 = False
 device_type = 'cuda' if 'cuda' in device else 'cpu' # for later use in torch.autocast
 # note: float16 data type will automatically use a GradScaler
 ptdtype = {'float32': torch.float32, 'bfloat16': torch.bfloat16, 'float16': torch.float16}[dtype]
@@ -191,9 +227,11 @@ if block_size < model.config.block_size:
     model.crop_block_size(block_size)
     model_args['block_size'] = block_size # so that the checkpoint will have the right value
 model.to(device)
+n_params = sum(p.numel() for p in model.parameters())
+print(f"total params (incl. position emb): {n_params:,} ({n_params/1e6:.3f}M)") #含有位置编码
 
 # initialize a GradScaler. If enabled=False scaler is a no-op
-scaler = torch.cuda.amp.GradScaler(enabled=(dtype == 'float16'))
+scaler = torch.amp.GradScaler(device_type, enabled=(dtype == 'float16')) #修改scaler = torch.cuda.amp.GradScaler(enabled=(dtype == 'float16'))
 
 # optimizer
 optimizer = model.configure_optimizers(weight_decay, learning_rate, (beta1, beta2), device_type)
@@ -252,7 +290,36 @@ t0 = time.time()
 local_iter_num = 0 # number of iterations in the lifetime of this process
 raw_model = model.module if ddp else model # unwrap DDP container if needed
 running_mfu = -1.0
+
+# ---- 统计用的累加器 ----
+t_start = time.time()       # 整次运行的墙钟时间
+train_time_total = 0.0      # 纯训练 step 的累计时间
+tokens_per_sec_log = []     # 每 log_interval 记一次吞吐，最后取中位数
+
+# ---- profiler（只在 profile=True 时启动）----
+prof = None
+if profile:
+    os.makedirs(profile_out_dir, exist_ok=True)
+    prof = torch.profiler.profile(
+        activities=[torch.profiler.ProfilerActivity.CPU,
+                    torch.profiler.ProfilerActivity.CUDA],
+        schedule=torch.profiler.schedule(
+            wait=profile_wait,
+            warmup=profile_warmup,
+            active=profile_steps,
+            repeat=1,
+        ),
+        record_shapes=True,
+        profile_memory=True,
+    )
+    prof.start()
+    print(f"profiler started: wait={profile_wait} warmup={profile_warmup} active={profile_steps}")
+
 while True:
+
+    # profiler 调度器：每步都要调一次，它内部决定记不记
+    if prof is not None:
+        prof.step()
 
     # determine and set the learning rate for this iteration
     lr = get_lr(iter_num) if decay_lr else learning_rate
@@ -262,28 +329,36 @@ while True:
     # evaluate the loss on train/val sets and write checkpoints
     if iter_num % eval_interval == 0 and master_process:
         losses = estimate_loss()
-        print(f"step {iter_num}: train loss {losses['train']:.4f}, val loss {losses['val']:.4f}")
+        val_ppl = math.exp(losses['val'])
+        print(f"step {iter_num}: train loss {losses['train']:.4f}, "
+              f"val loss {losses['val']:.4f}, val ppl {val_ppl:.2f}")
         if wandb_log:
             wandb.log({
-                "iter": iter_num,
                 "train/loss": losses['train'],
                 "val/loss": losses['val'],
+                "val/ppl": val_ppl,
                 "lr": lr,
-                "mfu": running_mfu*100, # convert to percentage
-            })
-        if losses['val'] < best_val_loss or always_save_checkpoint:
+                "mfu": max(running_mfu, 0.0) * 100,
+            }, step=iter_num)
+        # 是否历史最好
+        is_best = losses['val'] < best_val_loss
+        if is_best:
             best_val_loss = losses['val']
-            if iter_num > 0:
-                checkpoint = {
-                    'model': raw_model.state_dict(),
-                    'optimizer': optimizer.state_dict(),
-                    'model_args': model_args,
-                    'iter_num': iter_num,
-                    'best_val_loss': best_val_loss,
-                    'config': config,
-                }
-                print(f"saving checkpoint to {out_dir}")
-                torch.save(checkpoint, os.path.join(out_dir, 'ckpt.pt'))
+        if iter_num > 0:
+            checkpoint = {
+                'model': raw_model.state_dict(),
+                'optimizer': optimizer.state_dict(),
+                'model_args': model_args,
+                'iter_num': iter_num,
+                'best_val_loss': best_val_loss,
+                'config': config,
+            }
+            # last：每次评估都覆盖
+            torch.save(checkpoint, os.path.join(out_dir, 'ckpt.pt'))
+            if is_best:
+                # best：只有变好才覆盖
+                torch.save(checkpoint, os.path.join(out_dir, 'best_ckpt.pt'))
+                print(f"  new best val loss {best_val_loss:.4f} -> best_ckpt.pt")
     if iter_num == 0 and eval_only:
         break
 
@@ -317,20 +392,98 @@ while True:
     t1 = time.time()
     dt = t1 - t0
     t0 = t1
+    train_time_total += dt
     if iter_num % log_interval == 0 and master_process:
         # get loss as float. note: this is a CPU-GPU sync point
         # scale up to undo the division above, approximating the true total loss (exact would have been a sum)
         lossf = loss.item() * gradient_accumulation_steps
+        tokens_per_sec = tokens_per_iter / dt
+        peak_mem_mb = (torch.cuda.max_memory_allocated() / 1e6) if device_type == 'cuda' else 0.0
+        tokens_per_sec_log.append(tokens_per_sec)
         if local_iter_num >= 5: # let the training loop settle a bit
             mfu = raw_model.estimate_mfu(batch_size * gradient_accumulation_steps, dt)
             running_mfu = mfu if running_mfu == -1.0 else 0.9*running_mfu + 0.1*mfu
-        print(f"iter {iter_num}: loss {lossf:.4f}, time {dt*1000:.2f}ms, mfu {running_mfu*100:.2f}%")
+        print(f"iter {iter_num}: loss {lossf:.4f}, time {dt*1000:.2f}ms, "
+              f"tok/s {tokens_per_sec:,.0f}, peak {peak_mem_mb:.0f}MB, "
+              f"mfu {max(running_mfu,0)*100:.2f}%")
+        if wandb_log:
+            wandb.log({
+                "train/loss_step": lossf,
+                "lr": lr,
+                "perf/tokens_per_sec": tokens_per_sec,
+                "perf/peak_mem_MB": peak_mem_mb,
+                "perf/mfu": max(running_mfu, 0.0) * 100,
+            }, step=iter_num)
     iter_num += 1
     local_iter_num += 1
 
     # termination conditions
     if iter_num > max_iters:
         break
+
+# ---- 收尾：profiler trace + run_summary.json ----
+if prof is not None:
+    prof.stop()
+    trace_path = os.path.join(profile_out_dir, f"trace_{(run_tag or 'run')}.json")
+    prof.export_chrome_trace(trace_path)
+    print(f"profiler trace saved to {trace_path}")
+    try:
+        print(prof.key_averages().table(sort_by="self_cuda_time_total", row_limit=25))
+    except Exception:
+        print(prof.key_averages().table(row_limit=25))
+
+if master_process:
+    def _git_sha():
+        try:
+            import subprocess
+            return subprocess.check_output(
+                ['git', 'rev-parse', 'HEAD'], stderr=subprocess.DEVNULL
+            ).decode().strip()
+        except Exception:
+            return ''
+
+    def _mb(p):
+        return round(os.path.getsize(p) / 2**20, 2) if os.path.exists(p) else None
+
+    wall = time.time() - t_start
+    peak_mem_MB = (torch.cuda.max_memory_allocated() / 1e6) if device_type == 'cuda' else 0.0
+    tps_sorted = sorted(tokens_per_sec_log)
+    summary = {
+        'run_tag': run_tag or os.path.basename(out_dir),
+        'git_sha': _git_sha(),
+        'dtype': dtype,
+        'tf32': tf32,
+        'device': device,
+        'gpu': torch.cuda.get_device_name(0) if device_type == 'cuda' else 'cpu',
+        'dataset': dataset,
+        'model_args': model_args,
+        'batch_size': batch_size,
+        'gradient_accumulation_steps': gradient_accumulation_steps,
+        'tokens_per_iter': tokens_per_iter,
+        'max_iters': max_iters,
+        'n_params': n_params,
+        'best_val_loss': round(float(best_val_loss), 4),
+        'best_val_ppl': round(math.exp(float(best_val_loss)), 2),
+        'wall_time_s': round(wall, 1),
+        'train_time_s': round(train_time_total, 1),
+        'median_tokens_per_sec': round(tps_sorted[len(tps_sorted)//2], 1) if tps_sorted else None,
+        'avg_tokens_per_sec': (round(tokens_per_iter * (iter_num - 1) / train_time_total, 1)
+                               if train_time_total > 0 else None),
+        'peak_mem_MB': round(peak_mem_MB, 1),
+        'ckpt_MB': _mb(os.path.join(out_dir, 'ckpt.pt')),
+        'best_ckpt_MB': _mb(os.path.join(out_dir, 'best_ckpt.pt')),
+        'wandb_run_id': (wandb.run.id if (wandb_log and wandb.run is not None) else ''),
+        'wandb_run_url': (wandb.run.url if (wandb_log and wandb.run is not None) else ''),
+    }
+    os.makedirs(results_dir, exist_ok=True)
+    out_json = os.path.join(results_dir, summary['run_tag'] + '.json')
+    with open(out_json, 'w', encoding='utf-8') as f:
+        json.dump(summary, f, indent=2, ensure_ascii=False)
+    print(f"\nrun summary written to {out_json}")
+    print(json.dumps(summary, indent=2, ensure_ascii=False))
+
+if wandb_log and master_process:
+    wandb.finish()
 
 if ddp:
     destroy_process_group()
