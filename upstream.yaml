@@ -1,0 +1,25 @@
+nanogpt:
+  url: https://github.com/karpathy/nanoGPT.git
+  commit: 3adf61e154c3fe3fca428ad6bc3818b27a3b8291
+  vendored_at: nanoGPT/
+  how_to_get_pristine:
+    - git clone https://github.com/karpathy/nanoGPT.git nanoGPT-upstream
+    - git -C nanoGPT-upstream checkout 3adf61e154c3fe3fca428ad6bc3818b27a3b8291
+  local_modifications:
+    - "train.py: 新增 tf32 / run_tag / results_dir / profile* 配置项"
+    - "train.py: stdout/stderr 双写日志(_Tee)"
+    - "train.py: TF32 可由配置关闭（严格 FP32 基线）"
+    - "train.py: GradScaler 改用 torch.amp API,消除废弃警告"
+    - "train.py: 记录全量参数量"
+    - "train.py: 输出 val PPL;checkpoint 拆分为 last(ckpt.pt)/best(best_ckpt.pt)"
+    - "train.py: 每 log_interval 记录 tokens/s 与峰值显存"
+    - "train.py: 集成 torch.profiler(wait/warmup/active 可配)"
+    - "train.py: 结束时写出 results/<run_tag>.json 结构化指标"
+    - "sample.py: 新增 ckpt_name 参数，可加载 best_ckpt.pt"
+    - "configurator.py: 读取 config 时指定 encoding='utf-8'"
+
+dataset:
+  name: tinyshakespeare (char-level)
+  url: https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt
+  prepared_by: nanoGPT/data/shakespeare_char/prepare.py
+  split: 前 90% 训练 / 后 10% 验证(prepare.py 内固定)

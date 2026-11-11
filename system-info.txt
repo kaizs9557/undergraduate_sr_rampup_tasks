@@ -1,0 +1,7 @@
+OS: Windows-10-10.0.26200-SP0
+Python: 3.11.18 | packaged by conda-forge | (main, Oct 26 2026, 11:29:07) [MSC v.1944 64 bit (AMD64)]
+PyTorch: 2.15.0+cu134
+PyTorch CUDA: 13.4
+cuDNN: 92600
+GPU: NVIDIA GeForce RTX 5060 Laptop GPU
+NVIDIA GeForce RTX 5060 Laptop GPU, 8151 MiB, 591.86
