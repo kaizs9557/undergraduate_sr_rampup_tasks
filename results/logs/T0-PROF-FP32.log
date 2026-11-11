@@ -1,0 +1,86 @@
+tokens per iteration will be: 4,096
+found vocab_size = 65 (inside data\shakespeare_char\meta.pkl)
+Initializing a new model from scratch
+number of parameters: 0.80M
+total params (incl. position emb): 812,288 (0.812M)
+num decayed parameter tensors: 18, with 811,136 parameters
+num non-decayed parameter tensors: 9, with 1,152 parameters
+using fused AdamW: True
+profiler started: wait=10 warmup=5 active=30
+step 0: train loss 4.1832, val loss 4.1800, val ppl 65.37
+iter 0: loss 4.1843, time 1557.14ms, tok/s 2,630, peak 190MB, mfu 0.00%
+iter 10: loss 3.7641, time 13.95ms, tok/s 293,718, peak 197MB, mfu 0.52%
+iter 20: loss 3.5205, time 21.01ms, tok/s 194,953, peak 197MB, mfu 0.51%
+iter 30: loss 3.2578, time 25.32ms, tok/s 161,772, peak 197MB, mfu 0.48%
+iter 40: loss 3.0478, time 21.44ms, tok/s 191,030, peak 197MB, mfu 0.47%
+iter 50: loss 2.8471, time 11.66ms, tok/s 351,154, peak 197MB, mfu 0.49%
+iter 60: loss 2.7343, time 10.00ms, tok/s 409,620, peak 197MB, mfu 0.51%
+profiler trace saved to ../results/profiler\trace_T0-PROF-FP32.json
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+                                                   Name    Self CPU %      Self CPU   CPU total %     CPU total  CPU time avg     Self CUDA   Self CUDA %    CUDA total  CUDA time avg       CPU Mem  Self CPU Mem      CUDA Mem  Self CUDA Mem    # of Calls  
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+                                          ProfilerStep*         0.00%       0.000us         0.00%       0.000us       0.000us     678.584ms       262.31%     678.584ms      22.619ms           0 B           0 B           0 B           0 B            30  
+                                               aten::mm         5.65%      54.304ms         8.86%      85.272ms      55.733us     124.576ms        48.16%     124.576ms      81.422us           0 B           0 B       3.96 GB       3.96 GB          1530  
+                    aten::_efficient_attention_backward         0.77%       7.423ms         3.14%      30.188ms     251.570us      59.422ms        22.97%      64.341ms     536.175us           0 B           0 B     749.53 MB    -764.88 MB           120  
+_Z48fmha_cutlassB_f32_aligned_64x64_k32_dropout_sm80...         0.00%       0.000us         0.00%       0.000us       0.000us      59.422ms        22.97%      59.422ms     495.186us           0 B           0 B           0 B           0 B           120  
+_Z20magma_sgemmEx_kernelIfffLb1ELb0ELi6ELi4ELi6ELi3E...         0.00%       0.000us         0.00%       0.000us       0.000us      44.255ms        17.11%      44.255ms      86.774us           0 B           0 B           0 B           0 B           510  
+_ZN7cutlass7Kernel2I42cutlass_80_simt_sgemm_128x64_8...         0.00%       0.000us         0.00%       0.000us       0.000us      40.066ms        15.49%      40.066ms      83.471us           0 B           0 B           0 B           0 B           480  
+_ZN7cutlass7Kernel2I41cutlass_80_simt_sgemm_64x64_8x...         0.00%       0.000us         0.00%       0.000us       0.000us      30.396ms        11.75%      30.396ms      77.939us           0 B           0 B           0 B           0 B           390  
+                     aten::_efficient_attention_forward         0.40%       3.852ms         0.94%       9.081ms      75.673us      21.649ms         8.37%      21.649ms     180.406us       1.88 KB           0 B     247.50 MB           0 B           120  
+_Z39fmha_cutlassF_f32_aligned_64x64_rf_sm80N22PyTorc...         0.00%       0.000us         0.00%       0.000us       0.000us      21.649ms         8.37%      21.649ms     180.406us           0 B           0 B           0 B           0 B           120  
+                       aten::native_layer_norm_backward         0.58%       5.551ms         1.56%      15.026ms      55.651us      14.650ms         5.66%      14.650ms      54.258us           0 B           0 B     569.66 MB           0 B           270  
+                                aten::native_layer_norm         0.89%       8.581ms         1.82%      17.513ms      64.864us      11.485ms         4.44%      11.485ms      42.536us           0 B           0 B     548.44 MB           0 B           270  
+_ZN2at6native53_GLOBAL__N__e58679f9_20_layer_norm_ke...         0.00%       0.000us         0.00%       0.000us       0.000us      11.485ms         4.44%      11.485ms      42.536us           0 B           0 B           0 B           0 B           270  
+                              Optimizer.step#AdamW.step         0.00%       0.000us         0.00%       0.000us       0.000us       8.725ms         3.37%       8.725ms     290.825us           0 B           0 B           0 B           0 B            30  
+_ZN2at6native53_GLOBAL__N__e58679f9_20_layer_norm_ke...         0.00%       0.000us         0.00%       0.000us       0.000us       7.998ms         3.09%       7.998ms      29.622us           0 B           0 B           0 B           0 B           270  
+_ZN7cutlass7Kernel2I43cutlass_80_simt_sgemm_128x128_...         0.00%       0.000us         0.00%       0.000us       0.000us       7.839ms         3.03%       7.839ms      65.323us           0 B           0 B           0 B           0 B           120  
+_ZN2at6native53_GLOBAL__N__e58679f9_20_layer_norm_ke...         0.00%       0.000us         0.00%       0.000us       0.000us       6.652ms         2.57%       6.652ms      24.636us           0 B           0 B           0 B           0 B           270  
+                                    aten::gelu_backward         0.22%       2.148ms         0.43%       4.107ms      34.228us       3.866ms         1.49%       3.866ms      32.218us           0 B           0 B     960.00 MB     960.00 MB           120  
+_ZN2at6native29vectorized_elementwise_kernelILi4EZZZ...         0.00%       0.000us         0.00%       0.000us       0.000us       3.866ms         1.49%       3.866ms      32.218us           0 B           0 B           0 B           0 B           120  
+                                              aten::sum         0.41%       3.931ms         0.63%       6.085ms      40.569us       3.294ms         1.27%       3.294ms      21.958us           0 B           0 B       9.38 MB       9.38 MB           150  
+_ZN2at6native13reduce_kernelILi512ELi1ENS0_8ReduceOp...         0.00%       0.000us         0.00%       0.000us       0.000us       3.090ms         1.19%       3.090ms      25.750us           0 B           0 B           0 B           0 B           120  
+_ZN2at6native29vectorized_elementwise_kernelILi4ENS0...         0.00%       0.000us         0.00%       0.000us       0.000us       2.994ms         1.16%       2.994ms       5.872us           0 B           0 B           0 B           0 B           510  
+                                   aten::native_dropout         0.74%       7.105ms         1.73%      16.679ms      61.773us       2.247ms         0.87%       2.247ms       8.321us           0 B           0 B     675.00 MB           0 B           270  
+_ZN2at6native43_GLOBAL__N__5ad584b7_10_Dropout_cu_0e...         0.00%       0.000us         0.00%       0.000us       0.000us       2.247ms         0.87%       2.247ms       8.321us           0 B           0 B           0 B           0 B           270  
+                                             aten::gelu         0.29%       2.760ms         0.48%       4.657ms      38.808us       2.218ms         0.86%       2.218ms      18.481us           0 B           0 B     960.00 MB     960.00 MB           120  
+_ZN2at6native29vectorized_elementwise_kernelILi4EZZZ...         0.00%       0.000us         0.00%       0.000us       0.000us       2.218ms         0.86%       2.218ms      18.481us           0 B           0 B           0 B           0 B           120  
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  
+Self CPU time total: 961.968ms
+Self CUDA time total: 258.692ms
+
+
+run summary written to ../results\T0-PROF-FP32.json
+{
+  "run_tag": "T0-PROF-FP32",
+  "git_sha": "547ac81c530355dafab0aa403d07e0b7f3ba29d5",
+  "dtype": "float32",
+  "tf32": false,
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "dataset": "shakespeare_char",
+  "model_args": {
+    "n_layer": 4,
+    "n_head": 4,
+    "n_embd": 128,
+    "block_size": 128,
+    "bias": false,
+    "vocab_size": 65,
+    "dropout": 0.1
+  },
+  "batch_size": 32,
+  "gradient_accumulation_steps": 1,
+  "tokens_per_iter": 4096,
+  "max_iters": 60,
+  "n_params": 812288,
+  "best_val_loss": 4.18,
+  "best_val_ppl": 65.37,
+  "wall_time_s": 12.2,
+  "train_time_s": 4.0,
+  "median_tokens_per_sec": 194953.3,
+  "avg_tokens_per_sec": 61652.9,
+  "peak_mem_MB": 197.3,
+  "ckpt_MB": null,
+  "best_ckpt_MB": null,
+  "wandb_run_id": "",
+  "wandb_run_url": ""
+}
