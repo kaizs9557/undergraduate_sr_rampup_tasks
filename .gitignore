@@ -1,8 +1,6 @@
 Rampup Guideline.pdf
 Rampup Tasks.pdf
-实验记录模板.md
 wandb/
 nanoGPT/wandb/
 results/profiler/*.json
 results/profiler/*.gz
-docs/
