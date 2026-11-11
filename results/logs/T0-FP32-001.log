@@ -1,0 +1,399 @@
+tokens per iteration will be: 4,096
+found vocab_size = 65 (inside data\shakespeare_char\meta.pkl)
+Initializing a new model from scratch
+number of parameters: 0.80M
+total params (incl. position emb): 812,288 (0.812M)
+num decayed parameter tensors: 18, with 811,136 parameters
+num non-decayed parameter tensors: 9, with 1,152 parameters
+using fused AdamW: True
+wandb: [wandb.login()] Loaded credentials for https://api.forge.coreweave.com from C:\Users\19742\_netrc.
+wandb: Currently logged in as: kaizs (kaizs-nanjing-university) to https://api.forge.coreweave.com. Use `wandb login --relogin` to force relogin
+wandb: setting up run xqgmuhld
+wandb: Tracking run with wandb version 0.31.0
+wandb: Run data is saved locally in D:\undergraduate_sr\rampup_tasks\nanoGPT\wandb\run-20261111_112555-xqgmuhld
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run T0-FP32-001
+wandb:  View project at https://forge.coreweave.com/wandb/kaizs-nanjing-university/rampup-task0
+wandb:  View run at https://forge.coreweave.com/wandb/kaizs-nanjing-university/rampup-task0/runs/xqgmuhld
+step 0: train loss 4.1832, val loss 4.1800, val ppl 65.37
+iter 0: loss 4.1843, time 2067.51ms, tok/s 1,981, peak 190MB, mfu 0.00%
+iter 10: loss 3.7641, time 11.81ms, tok/s 346,802, peak 197MB, mfu 0.62%
+iter 20: loss 3.5205, time 10.28ms, tok/s 398,475, peak 197MB, mfu 0.63%
+iter 30: loss 3.2578, time 12.07ms, tok/s 339,416, peak 197MB, mfu 0.63%
+iter 40: loss 3.0478, time 12.43ms, tok/s 329,634, peak 197MB, mfu 0.62%
+iter 50: loss 2.8471, time 10.64ms, tok/s 385,113, peak 197MB, mfu 0.63%
+iter 60: loss 2.7343, time 10.20ms, tok/s 401,737, peak 197MB, mfu 0.64%
+iter 70: loss 2.6612, time 9.51ms, tok/s 430,832, peak 197MB, mfu 0.65%
+iter 80: loss 2.6502, time 9.51ms, tok/s 430,703, peak 197MB, mfu 0.66%
+iter 90: loss 2.5909, time 11.01ms, tok/s 372,181, peak 197MB, mfu 0.66%
+iter 100: loss 2.5243, time 10.08ms, tok/s 406,461, peak 197MB, mfu 0.67%
+iter 110: loss 2.5267, time 9.00ms, tok/s 455,229, peak 197MB, mfu 0.68%
+iter 120: loss 2.5553, time 9.00ms, tok/s 455,072, peak 197MB, mfu 0.70%
+iter 130: loss 2.5443, time 11.01ms, tok/s 372,052, peak 197MB, mfu 0.69%
+iter 140: loss 2.5097, time 9.00ms, tok/s 455,229, peak 197MB, mfu 0.70%
+iter 150: loss 2.4671, time 10.52ms, tok/s 389,328, peak 197MB, mfu 0.70%
+iter 160: loss 2.4645, time 9.50ms, tok/s 431,308, peak 197MB, mfu 0.71%
+iter 170: loss 2.4766, time 12.29ms, tok/s 333,150, peak 197MB, mfu 0.70%
+iter 180: loss 2.5028, time 11.00ms, tok/s 372,310, peak 197MB, mfu 0.69%
+iter 190: loss 2.4716, time 10.94ms, tok/s 374,567, peak 197MB, mfu 0.69%
+iter 200: loss 2.4417, time 12.83ms, tok/s 319,275, peak 197MB, mfu 0.68%
+iter 210: loss 2.4470, time 11.81ms, tok/s 346,942, peak 197MB, mfu 0.67%
+iter 220: loss 2.4886, time 12.46ms, tok/s 328,720, peak 197MB, mfu 0.66%
+iter 230: loss 2.4220, time 12.27ms, tok/s 333,706, peak 197MB, mfu 0.66%
+iter 240: loss 2.4144, time 11.35ms, tok/s 360,725, peak 197MB, mfu 0.66%
+step 250: train loss 2.3876, val loss 2.4037, val ppl 11.06
+  new best val loss 2.4037 -> best_ckpt.pt
+iter 250: loss 2.4125, time 1149.58ms, tok/s 3,563, peak 197MB, mfu 0.59%
+iter 260: loss 2.4426, time 9.52ms, tok/s 430,379, peak 197MB, mfu 0.61%
+iter 270: loss 2.4323, time 11.48ms, tok/s 356,918, peak 197MB, mfu 0.61%
+iter 280: loss 2.4181, time 11.00ms, tok/s 372,286, peak 197MB, mfu 0.62%
+iter 290: loss 2.4054, time 10.60ms, tok/s 386,342, peak 197MB, mfu 0.62%
+iter 300: loss 2.3883, time 10.00ms, tok/s 409,649, peak 197MB, mfu 0.63%
+iter 310: loss 2.3774, time 10.62ms, tok/s 385,597, peak 197MB, mfu 0.64%
+iter 320: loss 2.3381, time 10.45ms, tok/s 392,055, peak 197MB, mfu 0.65%
+iter 330: loss 2.3380, time 10.54ms, tok/s 388,491, peak 197MB, mfu 0.65%
+iter 340: loss 2.3673, time 9.90ms, tok/s 413,783, peak 197MB, mfu 0.66%
+iter 350: loss 2.3363, time 10.34ms, tok/s 396,196, peak 197MB, mfu 0.66%
+iter 360: loss 2.3166, time 10.74ms, tok/s 381,436, peak 197MB, mfu 0.67%
+iter 370: loss 2.3009, time 12.69ms, tok/s 322,681, peak 197MB, mfu 0.66%
+iter 380: loss 2.2865, time 9.00ms, tok/s 455,072, peak 197MB, mfu 0.67%
+iter 390: loss 2.3419, time 11.42ms, tok/s 358,571, peak 197MB, mfu 0.67%
+iter 400: loss 2.2882, time 10.71ms, tok/s 382,489, peak 197MB, mfu 0.67%
+iter 410: loss 2.2855, time 8.90ms, tok/s 460,290, peak 197MB, mfu 0.69%
+iter 420: loss 2.2667, time 9.33ms, tok/s 439,001, peak 197MB, mfu 0.69%
+iter 430: loss 2.2857, time 10.17ms, tok/s 402,848, peak 197MB, mfu 0.70%
+iter 440: loss 2.2685, time 11.58ms, tok/s 353,714, peak 197MB, mfu 0.69%
+iter 450: loss 2.2355, time 10.07ms, tok/s 406,826, peak 197MB, mfu 0.69%
+iter 460: loss 2.2466, time 9.49ms, tok/s 431,742, peak 197MB, mfu 0.70%
+iter 470: loss 2.2476, time 9.89ms, tok/s 414,332, peak 197MB, mfu 0.71%
+iter 480: loss 2.2468, time 9.10ms, tok/s 450,336, peak 197MB, mfu 0.71%
+iter 490: loss 2.2247, time 9.00ms, tok/s 455,072, peak 197MB, mfu 0.72%
+step 500: train loss 2.1514, val loss 2.1838, val ppl 8.88
+  new best val loss 2.1838 -> best_ckpt.pt
+iter 500: loss 2.2214, time 1145.52ms, tok/s 3,576, peak 197MB, mfu 0.65%
+iter 510: loss 2.2216, time 10.95ms, tok/s 374,118, peak 197MB, mfu 0.65%
+iter 520: loss 2.2309, time 8.97ms, tok/s 456,511, peak 197MB, mfu 0.67%
+iter 530: loss 2.1948, time 13.90ms, tok/s 294,655, peak 197MB, mfu 0.66%
+iter 540: loss 2.2224, time 12.03ms, tok/s 340,533, peak 197MB, mfu 0.65%
+iter 550: loss 2.1520, time 12.00ms, tok/s 341,385, peak 197MB, mfu 0.65%
+iter 560: loss 2.2161, time 11.97ms, tok/s 342,222, peak 197MB, mfu 0.64%
+iter 570: loss 2.1424, time 9.61ms, tok/s 426,109, peak 197MB, mfu 0.65%
+iter 580: loss 2.1560, time 12.01ms, tok/s 341,141, peak 197MB, mfu 0.65%
+iter 590: loss 2.1303, time 12.02ms, tok/s 340,735, peak 197MB, mfu 0.65%
+iter 600: loss 2.1663, time 9.90ms, tok/s 413,644, peak 197MB, mfu 0.65%
+iter 610: loss 2.1328, time 9.04ms, tok/s 452,876, peak 197MB, mfu 0.67%
+iter 620: loss 2.1698, time 9.83ms, tok/s 416,805, peak 197MB, mfu 0.68%
+iter 630: loss 2.1424, time 11.70ms, tok/s 350,167, peak 197MB, mfu 0.67%
+iter 640: loss 2.1021, time 12.90ms, tok/s 317,558, peak 197MB, mfu 0.66%
+iter 650: loss 2.1141, time 11.66ms, tok/s 351,391, peak 197MB, mfu 0.66%
+iter 660: loss 2.1351, time 12.07ms, tok/s 339,295, peak 197MB, mfu 0.65%
+iter 670: loss 2.1353, time 11.06ms, tok/s 370,256, peak 197MB, mfu 0.65%
+iter 680: loss 2.0901, time 10.01ms, tok/s 409,152, peak 197MB, mfu 0.66%
+iter 690: loss 2.1081, time 12.00ms, tok/s 341,229, peak 197MB, mfu 0.66%
+iter 700: loss 2.0855, time 11.66ms, tok/s 351,327, peak 197MB, mfu 0.65%
+iter 710: loss 2.0473, time 12.51ms, tok/s 327,541, peak 197MB, mfu 0.65%
+iter 720: loss 2.0440, time 9.24ms, tok/s 443,146, peak 197MB, mfu 0.66%
+iter 730: loss 2.0787, time 11.82ms, tok/s 346,599, peak 197MB, mfu 0.66%
+iter 740: loss 2.0659, time 12.45ms, tok/s 329,034, peak 197MB, mfu 0.65%
+step 750: train loss 1.9616, val loss 2.0408, val ppl 7.70
+  new best val loss 2.0408 -> best_ckpt.pt
+iter 750: loss 1.9894, time 1129.49ms, tok/s 3,626, peak 197MB, mfu 0.58%
+iter 760: loss 2.0456, time 12.90ms, tok/s 317,511, peak 197MB, mfu 0.58%
+iter 770: loss 2.0252, time 10.95ms, tok/s 374,036, peak 197MB, mfu 0.59%
+iter 780: loss 2.0567, time 9.90ms, tok/s 413,644, peak 197MB, mfu 0.61%
+iter 790: loss 2.0328, time 10.96ms, tok/s 373,735, peak 197MB, mfu 0.61%
+iter 800: loss 2.0264, time 12.01ms, tok/s 341,046, peak 197MB, mfu 0.61%
+iter 810: loss 2.0170, time 11.99ms, tok/s 341,555, peak 197MB, mfu 0.61%
+iter 820: loss 1.9783, time 12.00ms, tok/s 341,283, peak 197MB, mfu 0.61%
+iter 830: loss 1.9793, time 9.80ms, tok/s 418,032, peak 197MB, mfu 0.62%
+iter 840: loss 2.0249, time 13.12ms, tok/s 312,242, peak 197MB, mfu 0.62%
+iter 850: loss 2.0598, time 10.97ms, tok/s 373,240, peak 197MB, mfu 0.62%
+iter 860: loss 1.9949, time 11.09ms, tok/s 369,404, peak 197MB, mfu 0.63%
+iter 870: loss 1.9730, time 13.06ms, tok/s 313,616, peak 197MB, mfu 0.62%
+iter 880: loss 2.0006, time 11.84ms, tok/s 345,943, peak 197MB, mfu 0.62%
+iter 890: loss 1.9865, time 10.62ms, tok/s 385,683, peak 197MB, mfu 0.63%
+iter 900: loss 1.9551, time 13.10ms, tok/s 312,623, peak 197MB, mfu 0.62%
+iter 910: loss 1.9052, time 12.12ms, tok/s 337,993, peak 197MB, mfu 0.62%
+iter 920: loss 1.9508, time 14.11ms, tok/s 290,294, peak 197MB, mfu 0.61%
+iter 930: loss 1.9218, time 10.00ms, tok/s 409,561, peak 197MB, mfu 0.62%
+iter 940: loss 1.9052, time 10.60ms, tok/s 386,542, peak 197MB, mfu 0.63%
+iter 950: loss 1.9628, time 12.14ms, tok/s 337,456, peak 197MB, mfu 0.62%
+iter 960: loss 1.9631, time 12.66ms, tok/s 323,562, peak 197MB, mfu 0.62%
+iter 970: loss 1.9718, time 10.44ms, tok/s 392,521, peak 197MB, mfu 0.63%
+iter 980: loss 1.9369, time 12.36ms, tok/s 331,395, peak 197MB, mfu 0.62%
+iter 990: loss 1.9392, time 12.12ms, tok/s 337,974, peak 197MB, mfu 0.62%
+step 1000: train loss 1.8212, val loss 1.9414, val ppl 6.97
+  new best val loss 1.9414 -> best_ckpt.pt
+iter 1000: loss 1.9082, time 1129.72ms, tok/s 3,626, peak 197MB, mfu 0.56%
+iter 1010: loss 1.8759, time 13.01ms, tok/s 314,886, peak 197MB, mfu 0.56%
+iter 1020: loss 1.9155, time 10.39ms, tok/s 394,224, peak 197MB, mfu 0.57%
+iter 1030: loss 1.8861, time 10.77ms, tok/s 380,178, peak 197MB, mfu 0.58%
+iter 1040: loss 1.9072, time 10.65ms, tok/s 384,440, peak 197MB, mfu 0.59%
+iter 1050: loss 1.8681, time 12.26ms, tok/s 334,031, peak 197MB, mfu 0.59%
+iter 1060: loss 1.9145, time 12.89ms, tok/s 317,875, peak 197MB, mfu 0.59%
+iter 1070: loss 1.8584, time 11.18ms, tok/s 366,246, peak 197MB, mfu 0.60%
+iter 1080: loss 1.8578, time 11.45ms, tok/s 357,832, peak 197MB, mfu 0.60%
+iter 1090: loss 1.8952, time 9.93ms, tok/s 412,640, peak 197MB, mfu 0.62%
+iter 1100: loss 1.8702, time 9.93ms, tok/s 412,294, peak 197MB, mfu 0.63%
+iter 1110: loss 1.8276, time 10.15ms, tok/s 403,558, peak 197MB, mfu 0.64%
+iter 1120: loss 1.9223, time 9.07ms, tok/s 451,401, peak 197MB, mfu 0.65%
+iter 1130: loss 1.9218, time 12.09ms, tok/s 338,753, peak 197MB, mfu 0.65%
+iter 1140: loss 1.8929, time 13.05ms, tok/s 313,874, peak 197MB, mfu 0.64%
+iter 1150: loss 1.8543, time 9.85ms, tok/s 415,977, peak 197MB, mfu 0.65%
+iter 1160: loss 1.8793, time 9.89ms, tok/s 414,172, peak 197MB, mfu 0.66%
+iter 1170: loss 1.8137, time 11.40ms, tok/s 359,434, peak 197MB, mfu 0.66%
+iter 1180: loss 1.8447, time 11.95ms, tok/s 342,782, peak 197MB, mfu 0.65%
+iter 1190: loss 1.8258, time 14.29ms, tok/s 286,632, peak 197MB, mfu 0.64%
+iter 1200: loss 1.7638, time 9.58ms, tok/s 427,647, peak 197MB, mfu 0.65%
+iter 1210: loss 1.8615, time 9.54ms, tok/s 429,540, peak 197MB, mfu 0.66%
+iter 1220: loss 1.8042, time 9.69ms, tok/s 422,650, peak 197MB, mfu 0.67%
+iter 1230: loss 1.7690, time 10.53ms, tok/s 388,834, peak 197MB, mfu 0.67%
+iter 1240: loss 1.8256, time 8.61ms, tok/s 475,462, peak 197MB, mfu 0.69%
+step 1250: train loss 1.7274, val loss 1.8753, val ppl 6.52
+  new best val loss 1.8753 -> best_ckpt.pt
+iter 1250: loss 1.8131, time 1128.04ms, tok/s 3,631, peak 197MB, mfu 0.62%
+iter 1260: loss 1.8509, time 12.00ms, tok/s 341,331, peak 197MB, mfu 0.62%
+iter 1270: loss 1.8484, time 9.94ms, tok/s 411,888, peak 197MB, mfu 0.63%
+iter 1280: loss 1.8189, time 16.94ms, tok/s 241,827, peak 197MB, mfu 0.61%
+iter 1290: loss 1.7526, time 10.63ms, tok/s 385,303, peak 197MB, mfu 0.62%
+iter 1300: loss 1.7851, time 9.47ms, tok/s 432,416, peak 197MB, mfu 0.63%
+iter 1310: loss 1.7752, time 12.10ms, tok/s 338,526, peak 197MB, mfu 0.63%
+iter 1320: loss 1.7968, time 10.92ms, tok/s 375,172, peak 197MB, mfu 0.64%
+iter 1330: loss 1.7509, time 11.88ms, tok/s 344,915, peak 197MB, mfu 0.63%
+iter 1340: loss 1.7416, time 10.64ms, tok/s 384,966, peak 197MB, mfu 0.64%
+iter 1350: loss 1.7589, time 10.63ms, tok/s 385,415, peak 197MB, mfu 0.64%
+iter 1360: loss 1.7748, time 8.63ms, tok/s 474,674, peak 197MB, mfu 0.66%
+iter 1370: loss 1.7413, time 9.34ms, tok/s 438,766, peak 197MB, mfu 0.68%
+iter 1380: loss 1.7806, time 9.15ms, tok/s 447,439, peak 197MB, mfu 0.69%
+iter 1390: loss 1.7836, time 10.79ms, tok/s 379,473, peak 197MB, mfu 0.69%
+iter 1400: loss 1.7525, time 9.89ms, tok/s 414,362, peak 197MB, mfu 0.69%
+iter 1410: loss 1.8084, time 11.08ms, tok/s 369,531, peak 197MB, mfu 0.69%
+iter 1420: loss 1.8060, time 11.66ms, tok/s 351,327, peak 197MB, mfu 0.68%
+iter 1430: loss 1.7164, time 10.78ms, tok/s 380,136, peak 197MB, mfu 0.68%
+iter 1440: loss 1.7740, time 11.10ms, tok/s 369,086, peak 197MB, mfu 0.68%
+iter 1450: loss 1.7755, time 11.02ms, tok/s 371,641, peak 197MB, mfu 0.68%
+iter 1460: loss 1.7775, time 9.12ms, tok/s 449,159, peak 197MB, mfu 0.69%
+iter 1470: loss 1.7505, time 11.99ms, tok/s 341,589, peak 197MB, mfu 0.68%
+iter 1480: loss 1.7742, time 12.16ms, tok/s 336,834, peak 197MB, mfu 0.67%
+iter 1490: loss 1.7622, time 10.21ms, tok/s 401,314, peak 197MB, mfu 0.68%
+step 1500: train loss 1.6681, val loss 1.8385, val ppl 6.29
+  new best val loss 1.8385 -> best_ckpt.pt
+iter 1500: loss 1.7989, time 1127.10ms, tok/s 3,634, peak 197MB, mfu 0.61%
+iter 1510: loss 1.7048, time 9.95ms, tok/s 411,829, peak 197MB, mfu 0.62%
+iter 1520: loss 1.7082, time 8.94ms, tok/s 458,264, peak 197MB, mfu 0.64%
+iter 1530: loss 1.7843, time 10.90ms, tok/s 375,730, peak 197MB, mfu 0.65%
+iter 1540: loss 1.7250, time 11.00ms, tok/s 372,237, peak 197MB, mfu 0.65%
+iter 1550: loss 1.7795, time 10.69ms, tok/s 383,214, peak 197MB, mfu 0.65%
+iter 1560: loss 1.7384, time 12.09ms, tok/s 338,740, peak 197MB, mfu 0.65%
+iter 1570: loss 1.7175, time 10.05ms, tok/s 407,705, peak 197MB, mfu 0.65%
+iter 1580: loss 1.7729, time 13.00ms, tok/s 315,030, peak 197MB, mfu 0.64%
+iter 1590: loss 1.7658, time 13.02ms, tok/s 314,529, peak 197MB, mfu 0.64%
+iter 1600: loss 1.7071, time 8.93ms, tok/s 458,876, peak 197MB, mfu 0.65%
+iter 1610: loss 1.8124, time 10.08ms, tok/s 406,201, peak 197MB, mfu 0.66%
+iter 1620: loss 1.7131, time 11.99ms, tok/s 341,664, peak 197MB, mfu 0.66%
+iter 1630: loss 1.6800, time 12.19ms, tok/s 335,958, peak 197MB, mfu 0.65%
+iter 1640: loss 1.6696, time 13.11ms, tok/s 312,390, peak 197MB, mfu 0.64%
+iter 1650: loss 1.7121, time 8.09ms, tok/s 506,407, peak 197MB, mfu 0.67%
+iter 1660: loss 1.7563, time 12.82ms, tok/s 319,400, peak 197MB, mfu 0.66%
+iter 1670: loss 1.7606, time 14.94ms, tok/s 274,150, peak 197MB, mfu 0.64%
+iter 1680: loss 1.7579, time 10.98ms, tok/s 372,989, peak 197MB, mfu 0.64%
+iter 1690: loss 1.7090, time 12.00ms, tok/s 341,270, peak 197MB, mfu 0.64%
+iter 1700: loss 1.7104, time 10.04ms, tok/s 408,160, peak 197MB, mfu 0.65%
+iter 1710: loss 1.6776, time 11.94ms, tok/s 343,172, peak 197MB, mfu 0.64%
+iter 1720: loss 1.7355, time 9.52ms, tok/s 430,099, peak 197MB, mfu 0.66%
+iter 1730: loss 1.7170, time 12.19ms, tok/s 336,063, peak 197MB, mfu 0.65%
+iter 1740: loss 1.6940, time 14.02ms, tok/s 292,229, peak 197MB, mfu 0.64%
+step 1750: train loss 1.6015, val loss 1.7818, val ppl 5.94
+  new best val loss 1.7818 -> best_ckpt.pt
+iter 1750: loss 1.6785, time 1123.07ms, tok/s 3,647, peak 197MB, mfu 0.57%
+iter 1760: loss 1.7303, time 10.08ms, tok/s 406,470, peak 197MB, mfu 0.59%
+iter 1770: loss 1.6374, time 8.79ms, tok/s 465,869, peak 197MB, mfu 0.61%
+iter 1780: loss 1.7703, time 11.69ms, tok/s 350,324, peak 197MB, mfu 0.62%
+iter 1790: loss 1.7137, time 12.06ms, tok/s 339,731, peak 197MB, mfu 0.61%
+iter 1800: loss 1.7387, time 12.13ms, tok/s 337,542, peak 197MB, mfu 0.61%
+iter 1810: loss 1.6996, time 11.93ms, tok/s 343,316, peak 197MB, mfu 0.61%
+iter 1820: loss 1.6977, time 10.93ms, tok/s 374,624, peak 197MB, mfu 0.62%
+iter 1830: loss 1.7594, time 11.67ms, tok/s 351,032, peak 197MB, mfu 0.62%
+iter 1840: loss 1.6582, time 12.10ms, tok/s 338,466, peak 197MB, mfu 0.62%
+iter 1850: loss 1.7114, time 10.00ms, tok/s 409,620, peak 197MB, mfu 0.63%
+iter 1860: loss 1.6589, time 11.98ms, tok/s 341,772, peak 197MB, mfu 0.63%
+iter 1870: loss 1.6849, time 14.88ms, tok/s 275,327, peak 197MB, mfu 0.61%
+iter 1880: loss 1.7439, time 10.00ms, tok/s 409,737, peak 197MB, mfu 0.62%
+iter 1890: loss 1.7285, time 10.00ms, tok/s 409,727, peak 197MB, mfu 0.64%
+iter 1900: loss 1.6508, time 10.62ms, tok/s 385,631, peak 197MB, mfu 0.64%
+iter 1910: loss 1.6520, time 11.03ms, tok/s 371,208, peak 197MB, mfu 0.64%
+iter 1920: loss 1.6527, time 10.01ms, tok/s 409,259, peak 197MB, mfu 0.65%
+iter 1930: loss 1.6048, time 10.15ms, tok/s 403,691, peak 197MB, mfu 0.66%
+iter 1940: loss 1.7015, time 11.39ms, tok/s 359,562, peak 197MB, mfu 0.66%
+iter 1950: loss 1.7153, time 10.92ms, tok/s 374,951, peak 197MB, mfu 0.66%
+iter 1960: loss 1.7186, time 12.10ms, tok/s 338,413, peak 197MB, mfu 0.65%
+iter 1970: loss 1.6378, time 12.01ms, tok/s 341,128, peak 197MB, mfu 0.65%
+iter 1980: loss 1.7048, time 9.88ms, tok/s 414,372, peak 197MB, mfu 0.66%
+iter 1990: loss 1.6557, time 9.71ms, tok/s 421,757, peak 197MB, mfu 0.67%
+step 2000: train loss 1.5722, val loss 1.7478, val ppl 5.74
+  new best val loss 1.7478 -> best_ckpt.pt
+iter 2000: loss 1.6298, time 1104.28ms, tok/s 3,709, peak 197MB, mfu 0.60%
+iter 2010: loss 1.6534, time 11.16ms, tok/s 367,123, peak 197MB, mfu 0.61%
+iter 2020: loss 1.6164, time 10.69ms, tok/s 383,086, peak 197MB, mfu 0.61%
+iter 2030: loss 1.6459, time 10.96ms, tok/s 373,841, peak 197MB, mfu 0.62%
+iter 2040: loss 1.7115, time 13.00ms, tok/s 314,973, peak 197MB, mfu 0.61%
+iter 2050: loss 1.6144, time 10.10ms, tok/s 405,539, peak 197MB, mfu 0.62%
+iter 2060: loss 1.6633, time 10.08ms, tok/s 406,422, peak 197MB, mfu 0.63%
+iter 2070: loss 1.6382, time 10.95ms, tok/s 374,118, peak 197MB, mfu 0.64%
+iter 2080: loss 1.6595, time 11.14ms, tok/s 367,822, peak 197MB, mfu 0.64%
+iter 2090: loss 1.6434, time 10.01ms, tok/s 409,327, peak 197MB, mfu 0.65%
+iter 2100: loss 1.6978, time 10.12ms, tok/s 404,918, peak 197MB, mfu 0.66%
+iter 2110: loss 1.6648, time 12.93ms, tok/s 316,896, peak 197MB, mfu 0.65%
+iter 2120: loss 1.6751, time 12.00ms, tok/s 341,324, peak 197MB, mfu 0.64%
+iter 2130: loss 1.6380, time 11.06ms, tok/s 370,192, peak 197MB, mfu 0.64%
+iter 2140: loss 1.7267, time 10.10ms, tok/s 405,587, peak 197MB, mfu 0.65%
+iter 2150: loss 1.6376, time 11.12ms, tok/s 368,248, peak 197MB, mfu 0.65%
+iter 2160: loss 1.6274, time 11.76ms, tok/s 348,363, peak 197MB, mfu 0.65%
+iter 2170: loss 1.6614, time 12.03ms, tok/s 340,357, peak 197MB, mfu 0.65%
+iter 2180: loss 1.6377, time 11.92ms, tok/s 343,625, peak 197MB, mfu 0.64%
+iter 2190: loss 1.6401, time 10.06ms, tok/s 407,328, peak 197MB, mfu 0.65%
+iter 2200: loss 1.6007, time 11.12ms, tok/s 368,477, peak 197MB, mfu 0.65%
+iter 2210: loss 1.6734, time 9.01ms, tok/s 454,734, peak 197MB, mfu 0.67%
+iter 2220: loss 1.6726, time 13.59ms, tok/s 301,422, peak 197MB, mfu 0.65%
+iter 2230: loss 1.6041, time 12.67ms, tok/s 323,173, peak 197MB, mfu 0.65%
+iter 2240: loss 1.6275, time 11.93ms, tok/s 343,439, peak 197MB, mfu 0.64%
+step 2250: train loss 1.5400, val loss 1.7153, val ppl 5.56
+  new best val loss 1.7153 -> best_ckpt.pt
+iter 2250: loss 1.6179, time 1138.04ms, tok/s 3,599, peak 197MB, mfu 0.58%
+iter 2260: loss 1.5919, time 10.58ms, tok/s 387,152, peak 197MB, mfu 0.59%
+iter 2270: loss 1.5859, time 10.02ms, tok/s 408,733, peak 197MB, mfu 0.60%
+iter 2280: loss 1.6238, time 14.35ms, tok/s 285,418, peak 197MB, mfu 0.59%
+iter 2290: loss 1.6598, time 14.28ms, tok/s 286,790, peak 197MB, mfu 0.59%
+iter 2300: loss 1.6835, time 12.00ms, tok/s 341,324, peak 197MB, mfu 0.59%
+iter 2310: loss 1.7203, time 10.07ms, tok/s 406,875, peak 197MB, mfu 0.60%
+iter 2320: loss 1.6141, time 9.28ms, tok/s 441,143, peak 197MB, mfu 0.62%
+iter 2330: loss 1.5838, time 10.30ms, tok/s 397,737, peak 197MB, mfu 0.63%
+iter 2340: loss 1.5893, time 10.59ms, tok/s 386,812, peak 197MB, mfu 0.64%
+iter 2350: loss 1.6221, time 9.65ms, tok/s 424,372, peak 197MB, mfu 0.65%
+iter 2360: loss 1.6928, time 9.92ms, tok/s 413,047, peak 197MB, mfu 0.66%
+iter 2370: loss 1.6366, time 9.15ms, tok/s 447,801, peak 197MB, mfu 0.67%
+iter 2380: loss 1.6645, time 10.49ms, tok/s 390,567, peak 197MB, mfu 0.67%
+iter 2390: loss 1.6539, time 9.08ms, tok/s 450,939, peak 197MB, mfu 0.69%
+iter 2400: loss 1.6279, time 10.06ms, tok/s 407,347, peak 197MB, mfu 0.69%
+iter 2410: loss 1.6378, time 8.73ms, tok/s 469,203, peak 197MB, mfu 0.70%
+iter 2420: loss 1.6280, time 10.60ms, tok/s 386,438, peak 197MB, mfu 0.70%
+iter 2430: loss 1.6348, time 9.93ms, tok/s 412,482, peak 197MB, mfu 0.71%
+iter 2440: loss 1.6694, time 8.81ms, tok/s 464,698, peak 197MB, mfu 0.72%
+iter 2450: loss 1.6741, time 10.42ms, tok/s 393,096, peak 197MB, mfu 0.72%
+iter 2460: loss 1.6704, time 9.89ms, tok/s 414,142, peak 197MB, mfu 0.72%
+iter 2470: loss 1.6383, time 11.47ms, tok/s 357,118, peak 197MB, mfu 0.71%
+iter 2480: loss 1.6681, time 10.60ms, tok/s 386,316, peak 197MB, mfu 0.71%
+iter 2490: loss 1.5716, time 9.01ms, tok/s 454,662, peak 197MB, mfu 0.72%
+step 2500: train loss 1.5156, val loss 1.7014, val ppl 5.48
+  new best val loss 1.7014 -> best_ckpt.pt
+iter 2500: loss 1.6050, time 1111.32ms, tok/s 3,686, peak 197MB, mfu 0.65%
+iter 2510: loss 1.5893, time 11.08ms, tok/s 369,794, peak 197MB, mfu 0.65%
+iter 2520: loss 1.5568, time 9.98ms, tok/s 410,324, peak 197MB, mfu 0.66%
+iter 2530: loss 1.5751, time 11.55ms, tok/s 354,538, peak 197MB, mfu 0.65%
+iter 2540: loss 1.6275, time 12.88ms, tok/s 317,940, peak 197MB, mfu 0.65%
+iter 2550: loss 1.6081, time 10.77ms, tok/s 380,330, peak 197MB, mfu 0.65%
+iter 2560: loss 1.5854, time 9.21ms, tok/s 444,913, peak 197MB, mfu 0.66%
+iter 2570: loss 1.5688, time 11.98ms, tok/s 342,004, peak 197MB, mfu 0.66%
+iter 2580: loss 1.5720, time 10.05ms, tok/s 407,492, peak 197MB, mfu 0.66%
+iter 2590: loss 1.6225, time 12.20ms, tok/s 335,859, peak 197MB, mfu 0.66%
+iter 2600: loss 1.6266, time 12.17ms, tok/s 336,669, peak 197MB, mfu 0.65%
+iter 2610: loss 1.6296, time 11.00ms, tok/s 372,374, peak 197MB, mfu 0.65%
+iter 2620: loss 1.6413, time 9.77ms, tok/s 419,042, peak 197MB, mfu 0.66%
+iter 2630: loss 1.6738, time 11.70ms, tok/s 350,216, peak 197MB, mfu 0.66%
+iter 2640: loss 1.6557, time 10.01ms, tok/s 409,269, peak 197MB, mfu 0.67%
+iter 2650: loss 1.5435, time 12.51ms, tok/s 327,504, peak 197MB, mfu 0.66%
+iter 2660: loss 1.5916, time 10.10ms, tok/s 405,635, peak 197MB, mfu 0.66%
+iter 2670: loss 1.5506, time 10.99ms, tok/s 372,851, peak 197MB, mfu 0.66%
+iter 2680: loss 1.6296, time 9.81ms, tok/s 417,616, peak 197MB, mfu 0.67%
+iter 2690: loss 1.6347, time 10.44ms, tok/s 392,279, peak 197MB, mfu 0.68%
+iter 2700: loss 1.6247, time 8.99ms, tok/s 455,869, peak 197MB, mfu 0.69%
+iter 2710: loss 1.5981, time 9.84ms, tok/s 416,219, peak 197MB, mfu 0.69%
+iter 2720: loss 1.6452, time 12.45ms, tok/s 329,022, peak 197MB, mfu 0.68%
+iter 2730: loss 1.5723, time 14.03ms, tok/s 291,912, peak 197MB, mfu 0.67%
+iter 2740: loss 1.6339, time 12.60ms, tok/s 325,198, peak 197MB, mfu 0.66%
+step 2750: train loss 1.4981, val loss 1.6851, val ppl 5.39
+  new best val loss 1.6851 -> best_ckpt.pt
+iter 2750: loss 1.6217, time 1104.32ms, tok/s 3,709, peak 197MB, mfu 0.59%
+iter 2760: loss 1.6331, time 9.21ms, tok/s 444,867, peak 197MB, mfu 0.61%
+iter 2770: loss 1.6021, time 8.63ms, tok/s 474,582, peak 197MB, mfu 0.64%
+iter 2780: loss 1.5993, time 9.00ms, tok/s 455,132, peak 197MB, mfu 0.65%
+iter 2790: loss 1.6437, time 9.82ms, tok/s 417,240, peak 197MB, mfu 0.66%
+iter 2800: loss 1.6471, time 13.01ms, tok/s 314,903, peak 197MB, mfu 0.65%
+iter 2810: loss 1.5449, time 9.66ms, tok/s 423,828, peak 197MB, mfu 0.66%
+iter 2820: loss 1.5745, time 12.22ms, tok/s 335,067, peak 197MB, mfu 0.66%
+iter 2830: loss 1.5851, time 11.43ms, tok/s 358,482, peak 197MB, mfu 0.65%
+iter 2840: loss 1.5811, time 9.93ms, tok/s 412,383, peak 197MB, mfu 0.66%
+iter 2850: loss 1.5705, time 9.68ms, tok/s 422,931, peak 197MB, mfu 0.67%
+iter 2860: loss 1.5844, time 10.00ms, tok/s 409,532, peak 197MB, mfu 0.68%
+iter 2870: loss 1.6134, time 10.04ms, tok/s 407,986, peak 197MB, mfu 0.68%
+iter 2880: loss 1.5970, time 10.09ms, tok/s 406,038, peak 197MB, mfu 0.69%
+iter 2890: loss 1.5954, time 9.91ms, tok/s 413,335, peak 197MB, mfu 0.69%
+iter 2900: loss 1.5533, time 12.18ms, tok/s 336,326, peak 197MB, mfu 0.68%
+iter 2910: loss 1.6296, time 9.71ms, tok/s 421,954, peak 197MB, mfu 0.69%
+iter 2920: loss 1.5901, time 10.12ms, tok/s 404,842, peak 197MB, mfu 0.69%
+iter 2930: loss 1.6170, time 9.98ms, tok/s 410,305, peak 197MB, mfu 0.70%
+iter 2940: loss 1.5723, time 9.62ms, tok/s 425,613, peak 197MB, mfu 0.70%
+iter 2950: loss 1.5744, time 9.98ms, tok/s 410,383, peak 197MB, mfu 0.71%
+iter 2960: loss 1.5792, time 10.36ms, tok/s 395,221, peak 197MB, mfu 0.71%
+iter 2970: loss 1.5750, time 8.96ms, tok/s 456,911, peak 197MB, mfu 0.72%
+iter 2980: loss 1.5375, time 9.00ms, tok/s 455,144, peak 197MB, mfu 0.73%
+iter 2990: loss 1.5941, time 14.10ms, tok/s 290,549, peak 197MB, mfu 0.71%
+step 3000: train loss 1.4960, val loss 1.6784, val ppl 5.36
+  new best val loss 1.6784 -> best_ckpt.pt
+iter 3000: loss 1.5946, time 1117.80ms, tok/s 3,664, peak 197MB, mfu 0.64%
+
+run summary written to ../results\T0-FP32-001.json
+{
+  "run_tag": "T0-FP32-001",
+  "git_sha": "c7256c8d26182aec870dd18e4e92bd124a648700",
+  "dtype": "float32",
+  "tf32": false,
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "dataset": "shakespeare_char",
+  "model_args": {
+    "n_layer": 4,
+    "n_head": 4,
+    "n_embd": 128,
+    "block_size": 128,
+    "bias": false,
+    "vocab_size": 65,
+    "dropout": 0.1
+  },
+  "batch_size": 32,
+  "gradient_accumulation_steps": 1,
+  "tokens_per_iter": 4096,
+  "max_iters": 3000,
+  "n_params": 812288,
+  "best_val_loss": 1.6784,
+  "best_val_ppl": 5.36,
+  "wall_time_s": 50.2,
+  "train_time_s": 50.2,
+  "median_tokens_per_sec": 374623.7,
+  "avg_tokens_per_sec": 244806.3,
+  "peak_mem_MB": 197.3,
+  "ckpt_MB": 9.33,
+  "best_ckpt_MB": 9.33,
+  "wandb_run_id": "xqgmuhld",
+  "wandb_run_url": "https://forge.coreweave.com/wandb/kaizs-nanjing-university/rampup-task0/runs/xqgmuhld"
+}
+wandb: updating run metadata
+wandb: uploading output.log; uploading wandb-summary.json; uploading config.yaml
+wandb: uploading wandb-summary.json; uploading config.yaml
+wandb: uploading history steps 275-300, summary, console lines 297-361
+wandb: 
+wandb: Run summary:
+wandb:                  lr 0.0001
+wandb:                 mfu 0.70516
+wandb:            perf/mfu 0.6353
+wandb:    perf/peak_mem_MB 197.32838
+wandb: perf/tokens_per_sec 3664.33755
+wandb:          train/loss 1.49599
+wandb:     train/loss_step 1.59462
+wandb:            val/loss 1.67838
+wandb:             val/ppl 5.35686
+wandb: 
+wandb:  View run T0-FP32-001 at: https://forge.coreweave.com/wandb/kaizs-nanjing-university/rampup-task0/runs/xqgmuhld
+wandb:  View project at: https://forge.coreweave.com/wandb/kaizs-nanjing-university/rampup-task0
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: .\wandb\run-20261111_112555-xqgmuhld\logs
