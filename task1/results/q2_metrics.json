@@ -11,5 +11,7 @@
   "validation_tokens": 409600,
   "quantized_linear_layers": 17,
   "validation_loss": 1.6780275702476501,
-  "validation_ppl": 5.354983219319501
+  "validation_ppl": 5.354983219319501,
+  "weight_artifact": "task1/results/q2_weights.pt",
+  "weight_file_bytes": 824181
 }

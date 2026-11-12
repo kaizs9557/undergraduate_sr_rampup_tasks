@@ -3,6 +3,7 @@ import math
 import numpy as np
 import torch
 import json
+import os
 
 sys.path.insert(0, "nanoGPT")
 from model import GPT, GPTConfig
@@ -34,6 +35,7 @@ model.lm_head.weight = torch.nn.Parameter(model.lm_head.weight.detach().clone())
 
 layer_names = {}  # 保存“Linear 对象 → 层名称”的对应关系
 handles = []
+quantized_weights = {}  # 按层名收集 INT8 权重和 scale
 
 
 def fake_quant_input(module, inputs):
@@ -49,10 +51,23 @@ for name, layer in model.named_modules():  # 遍历模型的所有模块
 
         with torch.no_grad():  # 仅修改推理时内存中的权重
             weight_q, weight_scale = quantize_symmetric(layer.weight)  # 这一层权重共用一个 scale
+            quantized_weights[name] = {
+                "weight": weight_q.detach().cpu(),  # 这一层的 INT8 整数权重
+                "scale": weight_scale.detach().cpu(),  # 反量化需要的缩放系数
+                "zero_point": 0,  # 权重采用对称量化，零点为 0
+            }
             weight_hat = dequantize_symmetric(weight_q, weight_scale)  # 得到带 INT8 误差的浮点权重
             layer.weight.copy_(weight_hat)  # 放回这一层
 
         handles.append(layer.register_forward_pre_hook(fake_quant_input))  # 登记该层的输入量化 hook
+
+weights_path = f"task1/results/{run_tag.lower()}_weights.pt"
+torch.save(
+    {"weight_scheme": weight_scheme, "layers": quantized_weights},
+    weights_path,
+)
+weights_file_bytes = os.path.getsize(weights_path)
+print("weights saved to:", weights_path, "bytes:", weights_file_bytes)
 
 val_data = np.memmap(
     "nanoGPT/data/shakespeare_char/val.bin",
@@ -119,6 +134,8 @@ metrics = {
     "quantized_linear_layers": len(handles),
     "validation_loss": mean_loss,
     "validation_ppl": ppl,
+    "weight_artifact": weights_path,
+    "weight_file_bytes": weights_file_bytes,
 }
 
 result_path = f"task1/results/{run_tag.lower()}_metrics.json"

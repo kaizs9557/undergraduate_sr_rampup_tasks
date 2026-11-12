@@ -2,6 +2,7 @@ import sys
 import math
 import numpy as np
 import torch
+import json
 
 sys.path.insert(0, "nanoGPT")
 from model import GPT, GPTConfig
@@ -59,10 +60,28 @@ with torch.no_grad():
         _, loss = model(x, y)
         losses.append(loss.item())
 
-mean_loss = sum(losses) / len(losses)
+mean_loss = sum(losses) / len(losses) #100个batch平均loss
 ppl = math.exp(mean_loss)
 
 print("device:", device)
 print("validation tokens:", eval_batches * batch_size * block_size)
 print("validation loss:", mean_loss)
 print("validation PPL:", ppl)
+
+metrics = {
+    "run_tag": "baseline_fp32",
+    "checkpoint": "nanoGPT/out/task0-bf16/best_ckpt.pt",
+    "evaluation_precision": "fp32",
+    "eval_seed": 1337,
+    "eval_batches": eval_batches,
+    "batch_size": batch_size,
+    "block_size": block_size,
+    "validation_tokens": eval_batches * batch_size * block_size,
+    "validation_loss": mean_loss,
+    "validation_ppl": ppl,
+}
+
+result_path = "task1/results/baseline_metrics.json"
+with open(result_path, "w", encoding="utf-8") as file:
+    json.dump(metrics, file, indent=2)
+print("metrics saved to:", result_path)
