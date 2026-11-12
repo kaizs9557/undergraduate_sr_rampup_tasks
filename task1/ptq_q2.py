@@ -7,7 +7,10 @@ import json
 sys.path.insert(0, "nanoGPT")
 from model import GPT, GPTConfig
 
-from quant_core import quantize_symmetric, dequantize_symmetric,fake_quantize_with_params
+from quant_core import quantize_weight_per_channel,dequantize_weight_per_channel,fake_quantize_with_params
+
+run_tag = "Q2"
+weight_scheme = "symmetric_int8_per_channel"
 
 checkpoint = torch.load(
     "nanoGPT/out/task0-bf16/best_ckpt.pt",
@@ -45,8 +48,8 @@ for name, layer in model.named_modules():  # 遍历模型的所有模块
         layer_names[layer] = name  # 记录这个模块的名称
 
         with torch.no_grad():  # 仅修改推理时内存中的权重
-            weight_q, weight_scale = quantize_symmetric(layer.weight)  # 这一层权重共用一个 scale
-            weight_hat = dequantize_symmetric(weight_q, weight_scale)  # 得到带 INT8 误差的浮点权重
+            weight_q, weight_scale = quantize_weight_per_channel(layer.weight)
+            weight_hat = dequantize_weight_per_channel(weight_q, weight_scale)
             layer.weight.copy_(weight_hat)  # 放回这一层
 
         handles.append(layer.register_forward_pre_hook(fake_quant_input))  # 登记该层的输入量化 hook
@@ -99,5 +102,26 @@ print("device:", device)
 print("validation tokens:", eval_batches * batch_size * block_size)
 print("validation loss:", mean_loss)
 print("validation PPL:", ppl)
-print("mode: Q1 per-tensor W8A8 fake quant")  # 标记本次实验
+print("mode: Q2 per-tensor W8A8 fake quant")  # 标记本次实验
 print("quantized Linear layers:", len(handles))
+
+metrics = {
+    "run_tag": run_tag,
+    "checkpoint": "nanoGPT/out/task0-bf16/best_ckpt.pt",
+    "calibration": "task1/results/activation_ranges.json",
+    "weight_quantization": weight_scheme,
+    "activation_quantization": "asymmetric_int8_per_tensor_static",
+    "eval_seed": 1337,
+    "eval_batches": eval_batches,
+    "batch_size": batch_size,
+    "block_size": block_size,
+    "validation_tokens": eval_batches * batch_size * block_size,
+    "quantized_linear_layers": len(handles),
+    "validation_loss": mean_loss,
+    "validation_ppl": ppl,
+}
+
+result_path = f"task1/results/{run_tag.lower()}_metrics.json"
+with open(result_path, "w", encoding="utf-8") as file:
+    json.dump(metrics, file, indent=2, ensure_ascii=False)
+print("metrics saved to:", result_path)
