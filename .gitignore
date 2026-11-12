@@ -1,6 +1,4 @@
-Rampup Guideline.pdf
-Rampup Tasks.pdf
 wandb/
 nanoGPT/wandb/
-results/profiler/*.json
-results/profiler/*.gz
+task*/results/profiler/*.json
+task*/results/profiler/*.gz

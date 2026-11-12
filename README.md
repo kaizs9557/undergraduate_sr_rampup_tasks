@@ -31,8 +31,8 @@ NVIDIA GeForce RTX 5060 Laptop GPU, 8151 MiB, 591.86
 ### 2.2 代码改动
 
 拉取后先用原模型进行一个冒烟测试
-![smoke1](./figures/冒烟测试1.png)
-![smoke2](./figures/冒烟测试2.png)
+![smoke1](./task0/figures/冒烟测试1.png)
+![smoke2](./task0/figures/冒烟测试2.png)
 能跑通
 
 - 本地改动（共三个文件）：
@@ -56,8 +56,8 @@ git -C nanoGPT checkout 3adf61e154c3fe3fca428ad6bc3818b27a3b8291
 conda env create -f environment.yml
 conda activate rampup
 cd nanoGPT && python data/shakespeare_char/prepare.py
-python train.py ../configs/task0_fp32.py
-python train.py ../configs/task0_bf16.py
+python train.py ../task0/configs/task0_fp32.py
+python train.py ../task0/configs/task0_bf16.py
 ```
 
 ## 3. 训练数据
@@ -136,13 +136,13 @@ python train.py ../configs/task0_bf16.py
 ### 6.2 训练曲线
 使用W&B和trace
 
-![val loss](./figures/val_loss.png)
+![val loss](./task0/figures/val_loss.png)
 FP32 与 BF16 的验证集 loss 曲线，两条线几乎重合
 
-![perf_peak_mem_MB](./figures/perf_peak_mem_MB.png)
+![perf_peak_mem_MB](./task0/figures/perf_peak_mem_MB.png)
 两次的峰值显存对比，可看出BF16的峰值显存更低
 
-![tokens per second](./figures/perf_tokens_per_sec.png)
+![tokens per second](./task0/figures/perf_tokens_per_sec.png)
 
 两次的训练吞吐对比。FP32整体位于BF16上方；周期性向下的尖刺对应每 250 步一次的验证集测试。
 
@@ -188,10 +188,10 @@ FP32 与 BF16 的验证集 loss 曲线，两条线几乎重合
 
 ### 7.2 单步时间线
 trace_fp32：
-![trace fp32](./figures/trace_fp32.png)
+![trace fp32](./task0/figures/trace_fp32.png)
 
 trace_bf16：
-![trace bf16](./figures/trace_bf16.png)
+![trace bf16](./task0/figures/trace_bf16.png)
 
 图像侧面印证，从上到下依次为主线程，PyTorch 的反向引擎线程，以及GPU侧CUDA context在trace里的表示
 
@@ -256,4 +256,4 @@ PPL（困惑度）定义为 `PPL = e^loss`，等于"平均猜中概率的倒数"
 
 **checkpoint 内部**：`best_ckpt.pt` 是一个字典，包含 `model`（812,288 个参数值）、`optimizer`（AdamW 状态）、`model_args`（层数/头数/维度/词表）、`iter_num`、`best_val_loss`、`config`（全部超参）。仅凭该文件即可重建模型结构，不依赖外部记忆。
 
-拿到 `best_ckpt.pt` 后，从对应 json 读出 `git_sha`，`git checkout` 该 commit，按 `environment.yml` 建环境，执行 `python train.py ../configs/task0_fp32.py` 即可得到等价权重。
+拿到 `best_ckpt.pt` 后，从对应 json 读出 `git_sha`，`git checkout` 该 commit，按 `environment.yml` 建环境，执行 `python train.py ../task0/configs/task0_fp32.py` 即可得到等价权重。

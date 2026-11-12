@@ -1,7 +1,7 @@
 # Task 0 基线 A：严格 FP32
 out_dir = 'out/task0-bf16'
 run_tag = 'T0-BF16-001'
-results_dir = '../results'
+results_dir = '../task0/results'
 
 wandb_log = True
 wandb_project = 'rampup-task0'
