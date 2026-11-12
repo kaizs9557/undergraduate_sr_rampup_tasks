@@ -10,7 +10,7 @@
 基于nanoGPT复现了一个4层、4头128维的Transformer，参数量812,288。
 完成了FP32与BF16 AMP 两组实验：
 FP32的验证集loss为 1.6784，BF16为1.6767，相差 0.10%，**几乎无差别**；
-BF16的峰值显存比FP32低了31.4%，但吞吐只低了12.6%。通过 torch.profiler 与 trace 统计定位了原因：BF16使GPU计算时间下降56%，却把每步的GPU kernel数从214增加到 264，所以AMP在这种规模下不能加速。
+BF16的峰值显存比FP32低了31.4%，但吞吐却低了12.6%。通过 torch.profiler 与 trace 统计定位了原因：BF16使GPU计算时间下降56%，却把每步的GPU GPU 活动事件数从214增加到 264，所以AMP在这种规模下不能加速。
 
 
 ## 2. 环境
@@ -50,12 +50,14 @@ NVIDIA GeForce RTX 5060 Laptop GPU, 8151 MiB, 591.86
 
 ### 2.3 复现步骤
 
-```bash
-git clone https://github.com/karpathy/nanoGPT.git nanoGPT
-git -C nanoGPT checkout 3adf61e154c3fe3fca428ad6bc3818b27a3b8291
+```
+git clone git@github.com:kaizs9557/undergraduate_sr_rampup_tasks.git
+cd undergraduate_sr_rampup_tasks
+git checkout ccf788a
 conda env create -f environment.yml
 conda activate rampup
-cd nanoGPT && python data/shakespeare_char/prepare.py
+cd nanoGPT
+python data/shakespeare_char/prepare.py
 python train.py ../task0/configs/task0_fp32.py
 python train.py ../task0/configs/task0_bf16.py
 ```
@@ -104,7 +106,7 @@ python train.py ../task0/configs/task0_bf16.py
 
 ### 5.2 两组实验的唯一差异
 
-`git diff --no-index configs/task0_fp32.py configs/task0_bf16.py` 仅 4 行不同：
+`git diff --no-index task0/configs/task0_fp32.py task0/configs/task0_bf16.py` 仅 4 行不同：
 
 ```diff
 -out_dir = 'out/task0-fp32'
@@ -118,13 +120,13 @@ python train.py ../task0/configs/task0_bf16.py
 ```
 前三行为标识，唯一不同的只有 `dtype`，其余全部一样
 
-> FP32 组额外设置 `tf32 = False`。因为nanoGPT 自动将FP32变为 TF32（尾数仅 10 位）
+> 设置 `tf32 = False`。因为nanoGPT 自动将FP32变为 TF32（尾数仅 10 位）
 
 ## 6. 结果
 
 ### 6.1 主表
 
-> 数据来源：results/T0-FP32-001.json、T0-BF16-001.json。
+> 数据来源：task0/results/T0-FP32-001.json、T0-BF16-001.json。
 > tokens/s 用 median_tokens_per_sec
 
 | Precision | Val loss | Val PPL | Tokens/s（中位数） | Peak memory | Training time | Checkpoint |
@@ -180,7 +182,7 @@ FP32 与 BF16 的验证集 loss 曲线，两条线几乎重合
 从`results/profiler/trace_T0-PROF-*.json`中进行数据筛选
 |——|FP32|BF16|增幅|
 | --- | --- | --- | --- |
-| GPU kernel 数| 214 |264 | 增加23.4% |
+| GPU 活动事件数| 214 |264 | 增加23.4% |
 
 
 
@@ -204,7 +206,7 @@ trace_bf16：
 
 3.每步 GPU 实际计算时间只有 8.62 ms（FP32）与 3.78 ms（BF16），而每步端到端时间为 16.73 / 18.43 ms，即 GPU 分别有 63.3% 与 87.6% 的时间处于空闲。
 
-4.BF16 下每步 GPU kernel 数从 214 增至 264（+23.4%），增量来自 autocast 插入的类型转换算子（`aten::copy_` 达 2010 次，`aten::add` 达 4140 次）。CPU 侧总时间相应从 962 ms 升至 1,261 ms。每一步的总耗时由"CPU 把 200 多个 kernel 依次下发"决定，从而使得计算时间的节省被调度开销吃掉了。
+4.BF16 下每步 GPU 活动事件数从 214 增至 264（+23.4%），增量来自 autocast 插入的类型转换算子（`aten::copy_` 达 2010 次，`aten::add` 达 4140 次）。CPU 侧总时间相应从 962 ms 升至 1,261 ms。每一步的总耗时由"CPU 把 200 多个 kernel 依次下发"决定，从而使得计算时间的节省被调度开销吃掉了。
 
 5.**由此推出**，当每步计算量增大到 GPU 不再是空闲状态时，BF16 会变快。
 
@@ -225,7 +227,7 @@ trace_bf16：
 | seed | 1337 |
 | dtype | 与该 checkpoint 训练时一致（float32 / bfloat16） |
 
-生成结果见results/samples_bf16.txt和samples_fp32.txt
+生成结果见task0/results/samples_bf16.txt和samples_fp32.txt
 
 
 
@@ -256,4 +258,4 @@ PPL（困惑度）定义为 `PPL = e^loss`，等于"平均猜中概率的倒数"
 
 **checkpoint 内部**：`best_ckpt.pt` 是一个字典，包含 `model`（812,288 个参数值）、`optimizer`（AdamW 状态）、`model_args`（层数/头数/维度/词表）、`iter_num`、`best_val_loss`、`config`（全部超参）。仅凭该文件即可重建模型结构，不依赖外部记忆。
 
-拿到 `best_ckpt.pt` 后，从对应 json 读出 `git_sha`，`git checkout` 该 commit，按 `environment.yml` 建环境，执行 `python train.py ../task0/configs/task0_fp32.py` 即可得到等价权重。
+拿到 `best_ckpt.pt` 后，从对应 json 读出 `git_sha`，`git checkout` 该 commit，按 `environment.yml` 建环境，执行 `python train.py ../task0/configs/task0_fp32.py` 
