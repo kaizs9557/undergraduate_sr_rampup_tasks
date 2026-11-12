@@ -4,3 +4,5 @@ task*/results/profiler/*.json
 task*/results/profiler/*.gz
 Rampup Guideline.pdf
 Rampup Tasks.pdf
+__pycache__/
+*.pyc

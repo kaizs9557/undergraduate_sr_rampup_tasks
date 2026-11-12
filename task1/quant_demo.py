@@ -111,3 +111,27 @@ channel_error = (w[1] - channel_hat[1]).abs().max().item()
 print("small row error, per-tensor:", tensor_error)
 print("small row error, per-channel:", channel_error)
 print("fake-quantized data type:", channel_hat.dtype)
+
+import sys
+sys.path.insert(0, "nanoGPT")
+from model import GPT, GPTConfig
+
+ckpt = torch.load("nanoGPT/out/task0-bf16/best_ckpt.pt", map_location="cpu", weights_only=False)
+real_model = GPT(GPTConfig(**ckpt["model_args"]))
+real_model.load_state_dict(ckpt["model"])
+
+real_w = real_model.transformer.h[0].mlp.c_fc.weight.detach()  # 取第 0 层 MLP 第一层 Linear 的真实权重
+
+pt_q, pt_scale = quantize_symmetric(real_w)
+pt_hat = dequantize_symmetric(pt_q, pt_scale)
+
+pc_q, pc_scale = quantize_weight_per_channel(real_w)
+pc_hat = dequantize_weight_per_channel(pc_q, pc_scale)
+
+print("real weight shape:", tuple(real_w.shape))  # 权重矩阵的行数和列数
+print("per-tensor scale count:", pt_scale.numel())  # per-tensor 有多少个 scale
+print("per-channel scale count:", pc_scale.numel())  # per-channel 有多少个 scale
+print("per-tensor mean abs error:", (real_w - pt_hat).abs().mean().item())
+print("per-channel mean abs error:", (real_w - pc_hat).abs().mean().item())
+print("FP32 weight bytes:", real_w.numel() * real_w.element_size())  # 打印原始浮点权重的数据字节数
+print("INT8 weight bytes:", pt_q.numel() * pt_q.element_size())  # 打印 INT8 权重的数据字节数
