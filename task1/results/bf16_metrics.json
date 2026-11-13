@@ -1,0 +1,12 @@
+{
+  "run_tag": "baseline_bf16",
+  "checkpoint": "nanoGPT/out/task0-bf16/best_ckpt.pt",
+  "evaluation_precision": "bf16_autocast",
+  "eval_seed": 1337,
+  "eval_batches": 100,
+  "batch_size": 32,
+  "block_size": 128,
+  "validation_tokens": 409600,
+  "validation_loss": 1.6776769983768463,
+  "validation_ppl": 5.353106241861154
+}
