@@ -77,3 +77,14 @@ def dequantize_weight_per_channel(q, scale):
 def fake_quantize_weight_per_channel(w):
     q, scale = quantize_weight_per_channel(w)
     return dequantize_weight_per_channel(q, scale)
+
+
+#数值参与前向计算，但不记录它的梯度路径
+def fake_quantize_weight_per_channel_ste(w):
+    q, scale = quantize_weight_per_channel(w.detach())
+    w_hat = dequantize_weight_per_channel(q, scale)
+    return w + (w_hat - w).detach()
+
+def fake_quantize_with_params_ste(x, scale, zero_point):
+    x_hat = fake_quantize_with_params(x.detach(), scale, zero_point)
+    return x + (x_hat - x).detach()
