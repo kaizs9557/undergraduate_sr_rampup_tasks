@@ -1,0 +1,19 @@
+{
+  "run_tag": "Q3",
+  "checkpoint": "task1/results/q3_qat_checkpoint.pt",
+  "source_checkpoint": "nanoGPT/out/task0-bf16/best_ckpt.pt",
+  "calibration": "task1/results/activation_ranges.json",
+  "qat_steps": 400,
+  "weight_quantization": "symmetric_int8_per_channel",
+  "activation_quantization": "asymmetric_int8_per_tensor_static",
+  "eval_seed": 1337,
+  "eval_batches": 100,
+  "batch_size": 32,
+  "block_size": 128,
+  "validation_tokens": 409600,
+  "quantized_linear_layers": 17,
+  "validation_loss": 1.6677538859844208,
+  "validation_ppl": 5.300249452629878,
+  "weight_artifact": "task1/results/q3_weights.pt",
+  "weight_file_bytes": 824181
+}
